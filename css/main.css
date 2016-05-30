@@ -77,7 +77,7 @@ body {
 	color: #6c7279;
 }
 ul, ol {
-	margin: 0;
+	margin: 5px;
 	padding: 0;
 }
 ul li {
@@ -293,7 +293,7 @@ ul li {
 	$Banner
 ========================================================================== */
 .banner {
-	background-image: url(../images/banner1.jpg);
+	background-image: url(../images/banner.jpg);
 	background-position: center top;
 	background-repeat: no-repeat;
 	-moz-background-size: cover;

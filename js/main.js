@@ -1,14 +1,17 @@
 $(document).ready(function() {
 	// Header Scroll
-	$(window).on('scroll', function() {
-		var scroll = $(window).scrollTop();
 
-		if (scroll >= 50) {
-			$('#header').addClass('fixed');
-		} else {
-			$('#header').removeClass('fixed');
-		}
-	});
+		$('#header').addClass('fixed');
+
+	// $(window).on('scroll', function() {
+	// 	var scroll = $(window).scrollTop();
+  //
+	// 	if (scroll >= 50) {
+	// 		$('#header').addClass('fixed');
+	// 	} else {
+	// 		$('#header').removeClass('fixed');
+	// 	}
+	// });
 
 
 
@@ -44,7 +47,7 @@ $(document).ready(function() {
 		$(this).toggleClass('close-nav');
 		nav.toggleClass('open');
 		return false;
-	});	
+	});
 	nav.find('a').on('click', function() {
 		$('.nav-toggle').toggleClass('close-nav');
 		nav.toggleClass('open');
