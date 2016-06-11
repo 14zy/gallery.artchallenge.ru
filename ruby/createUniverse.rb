@@ -12,7 +12,11 @@ for n in 1..118
   painter = JSON.parse `curl -X GET http://178.62.133.139:5994/painters/#{n}`
   # print painter["name"]
 
+  description =  painter["bio"]["en"].sub("<p>","")[0..150].gsub(/\s\w+\s*$/, '...')
 
+  if painter["bio"]["en"] == ""
+    painter["bio"]["en"] = "<p>We beg your pardon, but temporary this painter's biography is not available</p><p>If you know the good source, please contact us: <a href='mailto:report@artchallenge.ru'>report@artchallenge.ru</a></p>."
+  end
 
   # Генерим страницу
   html =  %{
@@ -20,7 +24,7 @@ for n in 1..118
     <html lang="en">
       <head>
         <meta charset="utf-8">
-        <meta name="description" content="#{ painter["bio"]["en"].sub("<p>","")[0..150].gsub(/\s\w+\s*$/, '...') }">
+        <meta name="description" content="#{ description }">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>#{ painter["name"] }, #{ painter["nationality"].join(', ') } #{ painter["genre"].join(', ') } painter – Art Challenge</title>
         <link rel="stylesheet" href="../css/bootstrap.min.css">
@@ -58,7 +62,7 @@ for n in 1..118
             <div class="row">
               <div class="col-md-4 col-sm-6">
                 <div class="intro-content">
-                  <img src='../images/painters/#{ painter["id"] }.jpg'>
+                  <img style='width:100%' src='../images/painters/#{ painter["id"] }.jpg'>
                 </div>
               </div>
               <div class="col-md-5 col-sm-6">
