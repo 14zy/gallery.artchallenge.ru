@@ -1,6 +1,11 @@
  @media screen and (max-width: 1024px) {
+
+#introduction{
+  padding-top: 40px;
+}
+
 .banner {
-	min-height: 450px;
+	/*min-height: 450px;*/
 }
 #header .header-content {
 	width: 90%;
@@ -38,6 +43,7 @@
 	font-size: 25px;
 	margin: 0;
 	text-align: center;
+  color: white;
 }
 .person {
 	margin: 0 auto 50px;
