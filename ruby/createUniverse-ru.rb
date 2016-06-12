@@ -211,6 +211,8 @@ for n in 1..118
         <script src="../js/jquery.fancybox.pack.js"></script>
         <script src="../js/main.js"></script>
         <script src="../js/jquery.lazy.min.js"></script>
+
+        <script>$(function() {$('.lazy').Lazy();});</script>
       </body>
     </html>
   }
