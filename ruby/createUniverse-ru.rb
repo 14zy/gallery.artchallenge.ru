@@ -134,7 +134,7 @@ for n in 1..118
         </section>
         <section id="works" class="works section no-padding">
           <div class="container-fluid">
-          <div class='text-center'><br><br><h3>Работы #{ painterName }:</h3><br><br></div>
+          <div class='text-center'><br><br><h3>Работы художника:</h3><br><br></div>
             <div class="row no-gutter">
   }
 
@@ -145,7 +145,7 @@ for n in 1..118
       gallery = gallery + %{
         <div class="col-lg-2 col-md-4 col-sm-4 work">
           <a rel='gallery-examples' href="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" class="work-box">
-            <img src="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" alt="Картина #{ painterName }">
+            <img class='lazy' data-src="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" alt="Картина #{ painterName }">
             <div class="overlay">
               <div class="overlay-caption">
                 <p>
@@ -210,6 +210,7 @@ for n in 1..118
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/jquery.fancybox.pack.js"></script>
         <script src="../js/main.js"></script>
+        <script src="../js/jquery.lazy.min.js"></script>
       </body>
     </html>
   }
