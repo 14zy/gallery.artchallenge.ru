@@ -16,7 +16,7 @@ for n in 1..118
   description =  painter["bio"][lang].sub("<p>","")[0..150].gsub(/\s\w+\s*$/, '...')
 
   if painter["bio"]['ru'] == ""
-    painter["bio"]['ru'] = "<p>Просим не гневаться, но биография этого художника временно отсутствует.</p><p>Ежели Вам известен хороший источник, будьте так любезны, сообщите его нам: <a href='mailto:report@artchallenge.ru'>report@artchallenge.ru</a>."
+    painter["bio"]['ru'] = "<p>Просим не гневаться, но биография этого художника временно отсутствует.</p><p>Ежели Вам известен хороший источник, будьте так любезны, сообщите его нам: <a href='mailto:report@artchallenge.ru'>report@artchallenge.ru</a>.</p>"
   end
 
   painterName = langDB['painters'][painter['_id']]
