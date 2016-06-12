@@ -1,32 +1,45 @@
 require "json"
 
+## Берем всю инфу по текущему языку из CouchDB
+lang = "ru";
+langDB = JSON.parse `curl -X GET http://178.62.133.139:5994/lang/#{lang}`
 
-## Берем всю инфу по языку из CouchDB
-# lang = JSON.parse `curl -X GET http://178.62.133.139:5994/lang/ru`
-#print lang["head"]["title"]
 
-
+##Проходимся по всем 118 художникам
 for n in 1..118
 
-  ## Берем всю инфу по художнику из CouchDB
+  ## Берем инфу по художнику из CouchDB
   painter = JSON.parse `curl -X GET http://178.62.133.139:5994/painters/#{n}`
-  # print painter["name"]
 
-  description =  painter["bio"]["en"].sub("<p>","")[0..150].gsub(/\s\w+\s*$/, '...')
 
-  if painter["bio"]["en"] == ""
-    painter["bio"]["en"] = "<p>We beg your pardon, but temporary this painter's biography is not available</p><p>If you know the good source, please contact us: <a href='mailto:report@artchallenge.ru'>report@artchallenge.ru</a></p>."
+  ## Обрабатываем немного
+  description =  painter["bio"][lang].sub("<p>","")[0..150].gsub(/\s\w+\s*$/, '...')
+
+  if painter["bio"]['ru'] == ""
+    painter["bio"]['ru'] = "<p>Просим не гневаться, но биография этого художника временно отсутствует.</p><p>Ежели Вам известен хороший источник, будьте так любезны, сообщите его нам: <a href='mailto:report@artchallenge.ru'>report@artchallenge.ru</a>."
+  end
+
+  painterName = langDB['painters'][painter['_id']]
+
+  painterNations = []
+  painter["nationality"].each do |nationality|
+    painterNations.push(langDB['nation'][nationality])
+  end
+
+  painterGenres = []
+  painter["genre"].each do |genre|
+    painterGenres.push(langDB['genre'][genre])
   end
 
   # Генерим страницу
   html =  %{
     <!doctype html>
-    <html lang="en">
+    <html lang="#{lang}">
       <head>
         <meta charset="utf-8">
         <meta name="description" content="#{ description }">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>#{ painter["name"] }, #{ painter["nationality"].join(', ') } #{ painter["genre"].join(', ') } painter – Art Challenge</title>
+        <title>#{ painterName } – биография и картины художника в жанре #{ painterGenres.join(', ') } – Art Challenge</title>
         <link rel="stylesheet" href="../css/bootstrap.min.css">
         <link rel="stylesheet" href="../css/jquery.fancybox.css">
         <link rel="stylesheet" href="../css/main.css">
@@ -38,21 +51,21 @@ for n in 1..118
         <section class="banner" role="banner">
           <header id="header">
             <div class="header-content clearfix">
-              <a class="logo" href="#">#{ painter["name"] }</a>
+              <a class="logo" href="http://gallery.artchallenge.ru/#{lang}/#{ painter["id"] }.html">#{ painterName }</a>
               <nav class="navigation" role="navigation">
                 <ul class="primary-nav">
                   <li>
-                    <a href="http://artchallenge.ru">Back to Game</a>
+                    <a href="http://artchallenge.ru">Вернуться в Игру</a>
                   </li>
                   <li>
-                    <a href="http://gallery.artchallenge.ru/">Browse Painters</a>
+                    <a href="http://gallery.artchallenge.ru/">Обзор Художников</a>
                   </li>
                   <li>
-                    <a href="http://artchallenge.ru/#introduction">Donate</a>
+                    <a href="http://artchallenge.ru/#introduction">Поддержать проект</a>
                   </li>
                 </ul>
               </nav>
-              <a href="#" class="nav-toggle">Menu<span></span>
+              <a href="#" class="nav-toggle">Меню<span></span>
               </a>
             </div>
           </header>
@@ -67,19 +80,19 @@ for n in 1..118
               </div>
               <div class="col-md-5 col-sm-6">
                 <div class="intro-content">
-                  #{ painter["bio"]["en"] }
+                  #{ painter["bio"][lang] }
                 </div>
               </div>
               <div class="col-md-3 col-sm-6">
                 <div class="intro-content">
-                <h4>Nationality</h4>
-                #{ painter["nationality"].join(', ') }
-                <h4>Genres</h4>
-                #{ painter["genre"].join(', ') }
-                <h4>Years</h4>
+                <h4>Национальность</h4>
+                #{ painterNations.join(', ') }
+                <h4>Жанры</h4>
+                #{ painterGenres.join(', ') }
+                <h4>Годы жизни</h4>
                 #{ painter["years"] }
-                <h4>Wikipedia</h4>
-                <a target='_blank' href='#{ painter["link"]['wikipedia']['en'] }'>Open page</a>
+                <h4>Википедия</h4>
+                <a target='_blank' href='#{ painter["link"]['wikipedia'][lang] }'>Открыть страницу</a>
                 </div>
               </div>
             </div>
@@ -87,17 +100,18 @@ for n in 1..118
         </section>
         <section id="works" class="works section no-padding">
           <div class="container-fluid">
-          <div class='text-center'><br><br><h3>#{ painter["name"] } paintings:</h3><br><br></div>
+          <div class='text-center'><br><br><h3>Работы #{ painterName }:</h3><br><br></div>
             <div class="row no-gutter">
   }
 
 
+  ## Генерим галлерейку
   gallery = ""
   for i in 1..painter["paintings"].count
       gallery = gallery + %{
         <div class="col-lg-2 col-md-4 col-sm-4 work">
           <a rel='gallery-examples' href="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" class="work-box">
-            <img src="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" alt="#{ painter["name"] } painting">
+            <img src="http://artchallenge.me/painters/#{ painter["id"] }/#{i}.jpg" alt="Картина #{ painterName }">
             <div class="overlay">
               <div class="overlay-caption">
                 <p>
@@ -118,18 +132,18 @@ for n in 1..118
         <footer id="contact" class="footer">
           <div class="container">
             <div class="col-md-4">
-              <h4>Contact</h4>
+              <h4>Контакты</h4>
               <p>
-                <a href='http://facebook.com/just14zy'>Ruben Babaev</a> and <a href='http://www.facebook.com/plotkina.anna'>Anna Plotkina</a>
+                <a href='http://facebook.com/just14zy'>Рубен Бабаев</a> и <a href='http://www.facebook.com/plotkina.anna'>Анна Плоткина</a>
                 <br>
-                Email :
+                Email:
                 <a href="mailto:info@artchallenge.ru">
                   info@artchallenge.ru
                 </a>
               </p>
             </div>
             <div class="col-md-3">
-              <h4>Social presense</h4>
+              <h4>Социальные сети</h4>
               <ul class="footer-share">
                 <li>
                   <a href="http://facebook.com/artchallenge.ru/">
@@ -149,11 +163,11 @@ for n in 1..118
               </ul>
             </div>
             <div class="col-md-5">
-              <p>© 2013-2016 All rights reserved.<br>
-                Made with
+              <p>© 2013-2016 Все права защищены.<br>
+                Сделано с
                 <i class="fa fa-heart pulse"></i>
-                in
-                <a href="#">Rostov-on-Don</a>
+                в
+                <a href="#">Ростове-на-Дону</a>
               </p>
             </div>
           </div>
@@ -169,7 +183,8 @@ for n in 1..118
 
 
 
-  File.open(painter["_id"] +".html", 'w+') do |file|
+  ##Записываем в html файл
+  File.open("../"+lang+"/"+painter["_id"] +".html", 'w+') do |file|
       file.write html
   end
 
