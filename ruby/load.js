@@ -3196,7 +3196,7 @@ var request = require('request');
 		var paintings = painters[i].paintings;
 		painters[i].paintings = [];
 	
-		for (z=0; z< paintings; z++) {
+		for (z=1; z<= paintings; z++) {
 
 			painters[i].paintings.push({
 				id: z,
