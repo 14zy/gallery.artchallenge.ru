@@ -96,7 +96,7 @@ for n in 1..118
                     <a href="http://artchallenge.ru">Вернуться в Игру</a>
                   </li>
                   <li>
-                    <a href="http://gallery.artchallenge.ru/">Обзор Художников</a>
+                    <a href="http://gallery.artchallenge.ru/index-ru.html">Обзор Художников</a>
                   </li>
                   <li>
                     <a href="http://artchallenge.ru/#introduction">Поддержать проект</a>

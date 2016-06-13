@@ -2,7 +2,7 @@ require "json"
 
 
 ## Берем всю инфу по языку из CouchDB
-lang = "en";
+lang = "ru";
 # lang = JSON.parse `curl -X GET http://178.62.133.139:5994/lang/ru`
 #print lang["head"]["title"]
 
@@ -74,13 +74,13 @@ lang = "en";
               <nav class="navigation" role="navigation">
                 <ul class="primary-nav">
                   <li>
-                    <a href="http://artchallenge.ru">Back to Game</a>
+                    <a href="http://artchallenge.ru">Вернуться в Игру</a>
                   </li>
                   <li>
-                    <a href="http://gallery.artchallenge.ru/">Browse Painters</a>
+                    <a href="http://gallery.artchallenge.ru/index-ru.html">Обзор Художников</a>
                   </li>
                   <li>
-                    <a href="http://artchallenge.ru/#introduction">Donate</a>
+                    <a href="http://artchallenge.ru/#introduction">Поддержать проект</a>
                   </li>
                 </ul>
               </nav>
@@ -110,7 +110,7 @@ lang = "en";
 
       gallery = gallery + %{
         <div class="col-lg-2 col-md-4 col-sm-4 work">
-          <a href="http://gallery.artchallenge.ru/en/#{ i }.html" class="work-box">
+          <a href="http://gallery.artchallenge.ru/ru/#{ i }.html" class="work-box">
             <img style='width:250px' src="images/painters/#{ i }.jpg" alt="#{painter['name']} photo">
             <div class="overlay">
               <div class="overlay-caption">
@@ -183,6 +183,6 @@ lang = "en";
 
 
 
-  File.open("../index.html", 'w+') do |file|
+  File.open("../index-ru.html", 'w+') do |file|
       file.write html
   end
